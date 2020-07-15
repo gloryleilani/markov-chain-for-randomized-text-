@@ -48,15 +48,15 @@ def make_chains(text_string):
 
     for i in range(len(text_string)-2):
 
-        key_bigram = (text_string[i], text_string[i+1]) #Tuple
+        key_n_gram = (text_string[i], text_string[i+1]) #Tuple
         next_word = text_string[i+2] #Word after the bi
         #print("chains:", chains)
         
         #Could refactor with get 
-        if key_bigram not in chains: #Check if key is already in dictionary
-            chains[key_bigram] = []
+        if key_n_gram not in chains: #Check if key is already in dictionary
+            chains[key_n_gram] = []
     
-        chains[key_bigram].append(next_word) #For this key, append to list value
+        chains[key_n_gram].append(next_word) #For this key, append to list value
         #print("chains:", chains)
     
     for key, value in chains.items():     
@@ -98,7 +98,7 @@ def make_text(chains):
     return " ".join(words)
 
 
-input_path = "green-eggs.txt"
+#input_path = "gettysburg.txt"
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
