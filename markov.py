@@ -13,10 +13,12 @@ def open_and_read_file(file_path):
     the file's contents as one string of text.
     """
 
-    file_name = open(file_path).read().split()
+    file_name = open(file_path)
+    text_in_file = file_name.read().split()
     #print(file_name)
+    file_name.close()
 
-    return file_name
+    return text_in_file
 
 
 def make_chains(text_string):
@@ -46,6 +48,8 @@ def make_chains(text_string):
 
     chains = {}
 
+    text_string.append(None)
+
     for i in range(len(text_string)-2):
 
         key_n_gram = (text_string[i], text_string[i+1]) #Tuple
@@ -59,39 +63,35 @@ def make_chains(text_string):
         chains[key_n_gram].append(next_word) #For this key, append to list value
         #print("chains:", chains)
     
-    for key, value in chains.items():     
-        print(f"{key}, {value}")
+    #for key, value in chains.items():     
+    #    print(f"{key}, {value}")
         
     return chains
 
 
 def make_text(chains):
-    """Return text from chains."""
-
-    words = []
+    """Return text from chains."""  
     
     #Choice works on lists, not dictionaries, so converted keys to a list
-    initial_key = choice(list(chains.keys())) 
-    #print("initial_bigram:", initial_bigram)
-    words.extend([initial_key[0], initial_key[1]]) #extend takes >1 arg
+    key = choice(list(chains.keys())) 
+    #print("initial key:", key)
+    #words.extend([initial_key[0], initial_key[1]]) #extend takes >1 arg
+    words = [key[0], key[1]]
     #print("words:", words)
     #print("chains:", chains)
-    next_word = choice(chains[(words[0],words[1])])
+    next_word = choice(chains[key])
     #print("next word:", next_word)
     words.append(next_word)
     #print("words:", words)
     
-    for i, word in enumerate(chains): #Need index, so use enumerate
-        try:
-            next_key = (words[i+1],words[i+2])
-            #print("next tuple:", next_tuple)
-            next_word = choice(chains[next_key])
-            #print("next_word:", next_word)
-            words.append(next_word)
-
-        except:
-            print("")
-            break
+    while next_word is not None: #Unknown length of loop
+        key = (key[1],next_word) #Second word in key tuple and random list value 
+        #print("next key:", key)
+        words.append(next_word)
+        #print("words:", words)
+        next_word = choice(chains[key])
+        #print("next_word:", next_word)
+        
 
     #print("words:", words) #List of words built with Markov chains
 
